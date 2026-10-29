@@ -2,28 +2,390 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dalli</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dalli · 달리기 기록·목표·인증샷</title>
+<meta name="description" content="Dalli는 달리기를 기록하고, 목표를 세우고, 인증하는 iPhone·Apple Watch 러닝 앱이에요. Track runs. Hit goals. Share.">
+<meta name="apple-itunes-app" content="app-id=6827914282">
+<meta property="og:title" content="Dalli · 달리기 기록·목표·인증샷">
+<meta property="og:description" content="이번 주 목표까지 얼마나 남았는지, 오늘 몇 km면 되는지 알려주는 러닝 앱.">
+<meta property="og:image" content="https://hjazz.github.io/dalli-site/assets/icon.png">
+<meta name="theme-color" content="#F5F3F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161F" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
 <style>
-  :root { --ink: #14161F; --muted: #6B6E78; --accent: #FF5C1A; --paper: #F5F3F0; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; }
-  main { max-width: 560px; margin: 0 auto; padding: 72px 20px; text-align: center; }
-  .mark { color: var(--accent); font-weight: 900; letter-spacing: 4px; font-size: 15px; }
-  h1 { font-size: 26px; margin: 12px 0 4px; }
-  p { color: var(--muted); margin: 0; }
-  nav { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  nav a { color: var(--ink); text-decoration: none; background: #fff; padding: 10px 16px; border-radius: 999px; font-weight: 600; }
+  :root {
+    --ink: #14161F; --muted: #6B6E78; --accent: #FF5C1A; --accent-soft: #FFE7DC;
+    --paper: #F5F3F0; --card: #FFFFFF; --line: #E2DFDA; --bezel: #14161F;
+    --night: #14161F; --night-text: #F5F3F0; --night-muted: #9C9EA6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #F5F3F0; --muted: #9C9EA6; --accent-soft: #3A2116;
+      --paper: #0E0F15; --card: #1B1D27; --line: #2A2C37; --bezel: #2A2C37;
+      --night: #1B1D27;
+    }
+  }
+  :root[lang="ko"] .en, :root[lang="en"] .ko { display: none !important; }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: break-word;
+  }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  main { overflow-x: clip; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  .eyebrow { color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 12px; }
+  h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; margin: 0; }
+  h2 { font-size: clamp(28px, 4.4vw, 44px); font-weight: 800; }
+  .lede { color: var(--muted); font-size: 18px; max-width: 34em; }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 86%, transparent); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand svg { width: 30px; height: 30px; border-radius: 8px; }
+  .brand b { color: var(--accent); font-weight: 900; letter-spacing: .22em; font-size: 15px; }
+  .lang { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button, .seg button {
+    font: inherit; font-size: 14px; font-weight: 700; border: 0; background: none; color: var(--muted);
+    padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"], .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 48px 0 72px; }
+  .hero h1 { font-size: clamp(38px, 6.2vw, 68px); font-weight: 850; letter-spacing: -0.035em; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .lede { margin: 20px 0 32px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 16px; padding: 14px 22px; border-radius: 14px; }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary svg { width: 20px; height: 20px; fill: currentColor; }
+  .btn-ghost { background: var(--card); border: 1px solid var(--line); }
+  .meta { margin-top: 18px; color: var(--muted); font-size: 14px; }
+  .stage { position: relative; display: flex; justify-content: center; }
+  .stage .track { position: absolute; inset: -6% -14%; width: 128%; height: 112%; z-index: 0; }
+  .stage .phone { position: relative; z-index: 1; width: min(320px, 72vw); }
+
+  /* Device frames */
+  .phone { background: var(--bezel); padding: 2.6%; border-radius: 15% / 7%; box-shadow: 0 30px 60px -20px rgba(20,22,31,.35), 0 0 0 1px rgba(255,255,255,.04) inset; }
+  .phone img { width: 100%; height: auto; aspect-ratio: 1320 / 2868; object-fit: cover; border-radius: 12.6% / 5.8%; background: #EEE; }
+  .phone.duo { padding: 2.2%; border-radius: 7% / 4.8%; }
+  .phone.duo img { aspect-ratio: 1398 / 2034; border-radius: 5% / 3.4%; }
+
+  /* Name */
+  .name { padding: 88px 0; border-top: 1px solid var(--line); }
+  .name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .word { font-size: clamp(88px, 15vw, 172px); font-weight: 900; line-height: 1; letter-spacing: -0.04em; }
+  .word span { color: var(--accent); }
+  .word i { font-style: normal; color: var(--line); }
+  .roman { margin-top: 14px; color: var(--muted); font-size: 18px; letter-spacing: .04em; }
+  .roman b { color: var(--ink); }
+  .steps { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 28px 0 0; padding: 0; list-style: none; }
+  .steps li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 15px; line-height: 1.35; }
+  .steps li b { display: block; font-size: 19px; }
+  .steps li small { color: var(--muted); }
+  .steps .arrow { background: none; border: 0; padding: 0; color: var(--muted); }
+  .name p { margin: 18px 0 0; }
+
+  /* Features */
+  .features { padding: 88px 0; background: var(--card); }
+  .features h2 { margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+  .feature { background: var(--paper); border-radius: 20px; padding: 26px 24px 28px; }
+  .feature .n { font-weight: 800; color: var(--accent); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .feature h3 { font-size: 20px; margin: 10px 0 8px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  /* Gallery */
+  .gallery { padding: 88px 0 72px; }
+  .gallery-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; }
+  .seg { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+  .seg button { font-size: 15px; padding: 8px 18px; }
+  .strip {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 250px; gap: 28px;
+    --gutter: max(20px, calc((100vw - 1120px) / 2 + 20px));
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+    padding: 40px var(--gutter) 24px;
+    scrollbar-width: none;
+  }
+  .strip::-webkit-scrollbar { display: none; }
+  .strip[data-device="duo"] { grid-auto-columns: 330px; }
+  .shot { scroll-snap-align: start; margin: 0; }
+  .shot figcaption { margin-top: 18px; font-weight: 700; font-size: 17px; line-height: 1.35; }
+  .shot figcaption small { display: block; color: var(--muted); font-weight: 500; font-size: 14px; margin-top: 2px; }
+  .strip-nav { display: flex; gap: 8px; justify-content: flex-end; }
+  .strip-nav button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-size: 18px; cursor: pointer; }
+
+  /* Privacy */
+  .privacy { padding: 0 0 88px; }
+  .night { background: var(--night); color: var(--night-text); border-radius: 28px; padding: clamp(32px, 6vw, 64px); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .night h2 { color: var(--night-text); }
+  .night p { color: var(--night-muted); margin: 14px 0 0; }
+  .night ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .night li { display: flex; gap: 14px; align-items: baseline; font-size: 18px; font-weight: 600; padding: 16px 18px; border-radius: 16px; background: rgba(255,255,255,.06); }
+  .night li::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); transform: translateY(-2px); }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .hero, .name-grid, .night { grid-template-columns: 1fr; }
+    .hero { padding-top: 24px; gap: 56px; text-align: left; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .strip-nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .strip { grid-auto-columns: 62vw; gap: 18px; }
+    .strip[data-device="duo"] { grid-auto-columns: 78vw; }
+    .name, .features, .gallery { padding: 64px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
-<main>
-  <div class="mark">DALLI</div>
-  <h1>달리기 기록·목표·인증샷</h1>
-  <p>Track runs. Hit goals. Share.</p>
-  <nav>
-    <a href="support/">지원 · Support</a>
-    <a href="privacy/">개인정보처리방침 · Privacy</a>
-  </nav>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#FF5C1A"/>
+    <g transform="translate(50 50) scale(0.88) translate(-51.5 -50)">
+      <path d="M42 25 H50 A25 25 0 0 1 50 75 H42 Q28 75 28 61 V39 Q28 25 42 25 Z" fill="none" stroke="#FFF" stroke-width="19" stroke-linejoin="round"/>
+      <path d="M42 25 H50 A25 25 0 0 1 50 75 H42 Q28 75 28 61 V39 Q28 25 42 25 Z" fill="none" stroke="#FF5C1A" stroke-width="1.6"/>
+      <line x1="19.5" y1="50" x2="36.5" y2="50" stroke="#14161F" stroke-width="3"/>
+      <circle cx="67.7" cy="32.3" r="6.5" fill="#14161F"/>
+    </g>
+  </symbol>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top" aria-label="Dalli"><svg><use href="#logo"/></svg><b>DALLI</b></a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ko" aria-pressed="true">한국어</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow"><span class="ko">달리기 기록 · 목표 · 인증샷</span><span class="en">Track runs · Hit goals · Share</span></p>
+      <h1>
+        <span class="ko">이번 주 목표까지<br><em>얼마나</em> 남았을까</span>
+        <span class="en">How far to<br>this week's <em>goal?</em></span>
+      </h1>
+      <p class="lede">
+        <span class="ko">오늘 몇 km면 되는지 알려주는 러닝 앱. iPhone과 Apple Watch로 기록하고, 피트니스 앱에 쌓인 기록도 자동으로 가져와요.</span>
+        <span class="en">A running app that tells you what today needs. Record with iPhone and Apple Watch, and bring in the runs already in your Fitness app.</span>
+      </p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://apps.apple.com/app/id6827914282">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.62c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-2.99-.79-1.54.02-2.96.9-3.75 2.27-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.67 1.37-.58.67-1.1 1.76-.96 2.79 1.01.08 2.05-.51 2.69-1.27z"/></svg>
+          <span class="ko">App Store에서 받기</span><span class="en">Download on the App Store</span>
+        </a>
+        <a class="btn btn-ghost" href="#name"><span class="ko">이름의 뜻</span><span class="en">Why “Dalli”?</span></a>
+      </div>
+      <p class="meta"><span class="ko">무료 · iPhone · Apple Watch · 계정 없이 바로 시작</span><span class="en">Free · iPhone · Apple Watch · No account needed</span></p>
+    </div>
+    <div class="stage">
+      <svg class="track" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path d="M42 25 H50 A25 25 0 0 1 50 75 H42 Q28 75 28 61 V39 Q28 25 42 25 Z" fill="none" stroke="var(--accent-soft)" stroke-width="14" stroke-linejoin="round"/>
+        <path d="M42 25 H50 A25 25 0 0 1 50 75 H42 Q28 75 28 61 V39 Q28 25 42 25 Z" fill="none" stroke="var(--accent)" stroke-width=".5" stroke-dasharray="1.5 1.5" opacity=".6"/>
+      </svg>
+      <div class="phone"><img data-shot="iphone-1" src="assets/screens/ko/iphone-1.jpg" width="598" height="1300" alt="Dalli 홈 화면: 이번 주 목표 진행률과 최근 달리기"></div>
+    </div>
+  </section>
+
+  <section class="name" id="name">
+    <div class="wrap name-grid">
+      <div>
+        <div class="word" lang="ko" aria-label="달리기"><span>달리</span><i>기</i></div>
+        <p class="roman"><b>Dalli</b> [dal·li] — <span class="ko">달리다, 달리기의 ‘달리’</span><span class="en">from 달리다, “to run”</span></p>
+      </div>
+      <div>
+        <p class="eyebrow"><span class="ko">이름의 뜻</span><span class="en">The name</span></p>
+        <h2><span class="ko">Dalli는 ‘달리기’에서 왔어요</span><span class="en">Dalli comes from the Korean word for running</span></h2>
+        <p class="ko">한국어로 달리는 일은 <b>달리기</b>, 달리는 동작은 <b>달리다</b>예요. 두 말이 함께 품고 있는 뿌리 <b>‘달리’</b>를 그대로 소리 내어 이름으로 삼았어요. 달리고, 달리자, 달렸다 — 모든 달리기는 ‘달리’에서 시작하니까요.</p>
+        <p class="en">In Korean, running is <b>달리기</b> (dal-li-gi) and to run is <b>달리다</b> (dal-li-da). Both grow from the same root, <b>달리</b> — spelled in English as <b>Dalli</b>. Every run, in every tense, starts there.</p>
+        <ul class="steps" lang="ko">
+          <li><b>달리다</b><small class="ko">달리는 동작</small><small class="en">to run</small></li>
+          <li class="arrow" aria-hidden="true">→</li>
+          <li><b>달리</b><small>Dalli</small></li>
+          <li class="arrow" aria-hidden="true">→</li>
+          <li><b>달리기</b><small class="ko">달리는 일</small><small class="en">running</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="wrap">
+      <p class="eyebrow"><span class="ko">무엇을 할 수 있나요</span><span class="en">What it does</span></p>
+      <h2><span class="ko">기록하고, 목표를 세우고, 인증해요</span><span class="en">Record. Set goals. Prove it.</span></h2>
+      <div class="grid">
+        <article class="feature">
+          <div class="n">01</div>
+          <h3><span class="ko">iPhone과 Apple Watch로 기록</span><span class="en">Record on iPhone and Watch</span></h3>
+          <p><span class="ko">시작 버튼 하나로 경로·거리·페이스·심박수를 기록해요. 워치에서 달린 기록은 iPhone으로 자동으로 들어와요.</span><span class="en">One tap records route, distance, pace and heart rate. Watch runs sync to your iPhone on their own.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">02</div>
+          <h3><span class="ko">흩어진 기록을 한곳에</span><span class="en">All your runs in one place</span></h3>
+          <p><span class="ko">피트니스 앱과 다른 러닝 앱이 건강 앱에 남긴 달리기를 지도 경로·구간 기록까지 가져와요. 연도별·월별로 모아 볼 수 있어요.</span><span class="en">Runs other apps saved to Health come in with routes and splits. Browse them by year and month.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">03</div>
+          <h3><span class="ko">믿을 수 있는 인증</span><span class="en">Verified runs</span></h3>
+          <p><span class="ko">센서로 측정한 기록에는 인증 배지가 붙어요. 목표와 챌린지에는 인증 기록만 집계해요.</span><span class="en">Sensor-measured runs get a verified badge, and only those count toward goals and challenges.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">04</div>
+          <h3><span class="ko">오늘 할 일로 바꾼 목표</span><span class="en">Goals turned into today</span></h3>
+          <p><span class="ko">주간·월간 거리, 대회 완주, 기록 단축. “하루 1.3km씩 5일이면 골인이에요”처럼 남은 길을 알려줘요.</span><span class="en">Weekly distance, a race, a time to beat — broken down into “1.3 km a day for 5 days gets you there.”</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">05</div>
+          <h3><span class="ko">골인의 순간</span><span class="en">The finish line</span></h3>
+          <p><span class="ko">달리기를 마치면 목표 트랙이 그만큼 앞으로 나아가요. 최장 거리, 최고 5K·10K 같은 개인 기록도 찾아줘요.</span><span class="en">Your goal track moves forward with every run, and personal bests like your fastest 5K are found for you.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">06</div>
+          <h3><span class="ko">인증샷 카드</span><span class="en">Share cards</span></h3>
+          <p><span class="ko">경로·사진·투명 스티커 세 가지 스타일로 꾸며 스토리에 바로 올려요.</span><span class="en">Route, photo or transparent sticker — ready for your stories.</span></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" id="screens">
+    <div class="wrap gallery-head">
+      <div>
+        <p class="eyebrow"><span class="ko">화면 둘러보기</span><span class="en">Screens</span></p>
+        <h2><span class="ko">iPhone에서도, iPhone Duo에서도</span><span class="en">On iPhone and iPhone Duo</span></h2>
+      </div>
+      <div style="display:grid; gap:12px; justify-items:end">
+        <div class="seg" role="group" aria-label="Device">
+          <button type="button" data-device="iphone" aria-pressed="true">iPhone</button>
+          <button type="button" data-device="duo" aria-pressed="false">iPhone Duo</button>
+        </div>
+        <div class="strip-nav">
+          <button type="button" data-scroll="-1" aria-label="Previous">←</button>
+          <button type="button" data-scroll="1" aria-label="Next">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="strip" data-device="iphone" tabindex="0" aria-label="Screenshots">
+      <figure class="shot">
+        <div class="phone"><img data-shot="1" src="assets/screens/ko/iphone-1.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">이번 주 목표까지 얼마나 남았을까<small>홈</small></span><span class="en">How far to this week's goal?<small>Home</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="2" src="assets/screens/ko/iphone-2.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">나만의 목표, 한 바퀴씩<small>목표</small></span><span class="en">Your goals, one lap at a time<small>Goals</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="3" src="assets/screens/ko/iphone-3.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">골인의 순간<small>달리기를 마친 뒤</small></span><span class="en">Cross the finish line<small>After a run</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="4" src="assets/screens/ko/iphone-4.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">인증샷으로 자랑하기<small>인증샷 카드</small></span><span class="en">Share your proof<small>Share card</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="5" src="assets/screens/ko/iphone-5.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">모든 달리기를 한곳에<small>기록 상세</small></span><span class="en">Every run, in one place<small>Run detail</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="6" src="assets/screens/ko/iphone-6.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">시작 버튼 하나로<small>기록</small></span><span class="en">Start with one tap<small>Record</small></span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="privacy">
+    <div class="wrap">
+      <div class="night">
+        <div>
+          <p class="eyebrow"><span class="ko">개인정보</span><span class="en">Privacy</span></p>
+          <h2><span class="ko">기록은 내 기기에만</span><span class="en">Your runs stay on your device</span></h2>
+          <p><span class="ko">Dalli에는 서버가 없어요. 달리기·위치·건강 데이터는 iPhone과 Apple 건강 앱 밖으로 나가지 않아요.</span><span class="en">Dalli has no server. Your runs, location and health data never leave your iPhone and Apple Health.</span></p>
+        </div>
+        <ul>
+          <li><span class="ko">계정 없이 바로 시작</span><span class="en">No account to create</span></li>
+          <li><span class="ko">광고도, 추적도 없음</span><span class="en">No ads, no tracking</span></li>
+          <li><span class="ko">기기와 건강 앱에만 저장</span><span class="en">Stored only on device and in Health</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Dalli</span>
+    <nav>
+      <a href="support/"><span class="ko">지원</span><span class="en">Support</span></a>
+      <a href="privacy/"><span class="ko">개인정보처리방침</span><span class="en">Privacy Policy</span></a>
+      <a href="mailto:dalliapp.support@gmail.com">dalliapp.support@gmail.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const strip = document.querySelector(".strip");
+  const titles = { ko: "Dalli · 달리기 기록·목표·인증샷", en: "Dalli · Track runs. Hit goals. Share." };
+  const heroAlt = { ko: "Dalli 홈 화면: 이번 주 목표 진행률과 최근 달리기", en: "Dalli home screen: this week's goal progress and recent runs" };
+  let lang = "ko";
+  let device = "iphone";
+
+  function render() {
+    root.lang = lang;
+    document.title = titles[lang];
+    document.querySelectorAll("img[data-shot]").forEach(img => {
+      const shot = img.dataset.shot.includes("-") ? img.dataset.shot : `${device}-${img.dataset.shot}`;
+      img.src = `assets/screens/${lang}/${shot}.jpg`;
+    });
+    document.querySelector(".hero img").alt = heroAlt[lang];
+    strip.dataset.device = device;
+    strip.querySelectorAll(".phone").forEach(p => p.classList.toggle("duo", device === "duo"));
+    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+    document.querySelectorAll("[data-device]").forEach(b => { if (b.tagName === "BUTTON") b.setAttribute("aria-pressed", b.dataset.device === device); });
+  }
+
+  // 주소의 ?lang=en·#en, 지난번 선택, 브라우저 언어 순서로 고른다.
+  const query = new URLSearchParams(location.search).get("lang");
+  let saved = null;
+  try { saved = localStorage.getItem("dalli.lang"); } catch {}
+  lang = query || (location.hash === "#en" ? "en" : null) || saved || (navigator.language.startsWith("ko") ? "ko" : "en");
+  if (!titles[lang]) lang = "ko";
+  render();
+
+  document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => {
+    lang = b.dataset.lang;
+    try { localStorage.setItem("dalli.lang", lang); } catch {}
+    render();
+  }));
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+    device = b.dataset.device;
+    render();
+    strip.scrollTo({ left: 0 });
+  }));
+  document.querySelectorAll("[data-scroll]").forEach(b => b.addEventListener("click", () => {
+    const step = strip.querySelector(".shot").getBoundingClientRect().width + 28;
+    strip.scrollBy({ left: step * Number(b.dataset.scroll), behavior: "smooth" });
+  }));
+</script>
 </body>
 </html>
