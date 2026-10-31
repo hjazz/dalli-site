@@ -126,6 +126,11 @@
   .strip-nav { display: flex; gap: 8px; justify-content: flex-end; }
   .strip-nav button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-size: 18px; cursor: pointer; }
 
+  /* Apple Watch */
+  .watch { background: #0B0C10; padding: 7%; border-radius: 30% / 26%; box-shadow: 0 0 0 5px var(--bezel), 0 30px 60px -20px rgba(20,22,31,.4); }
+  .watch img { display: block; width: 100%; height: auto; aspect-ratio: 416 / 496; border-radius: 22% / 18%; background: #000; }
+  .strip.watches { grid-auto-columns: 220px; }
+
   /* Privacy */
   .privacy { padding: 0 0 88px; }
   .night { background: var(--night); color: var(--night-text); border-radius: 28px; padding: clamp(32px, 6vw, 64px); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
@@ -320,6 +325,34 @@
       <figure class="shot">
         <div class="phone"><img data-shot="7" src="assets/screens/ko/iphone-7.jpg" loading="lazy" alt=""></div>
         <figcaption><span class="ko">시작 버튼 하나로<small>기록</small></span><span class="en">Start with one tap<small>Record</small></span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="gallery" id="watch" style="padding-top:0">
+    <div class="wrap gallery-head">
+      <div>
+        <p class="eyebrow"><span class="ko">Apple Watch</span><span class="en">Apple Watch</span></p>
+        <h2><span class="ko">손목에서도 Dalli</span><span class="en">Dalli on your wrist</span></h2>
+        <p class="lede" style="margin-top:12px"><span class="ko">iPhone 없이 워치만 차고 나가도 기록되고, 달리는 중에 진동과 음성으로 알려줘요.</span><span class="en">Leave your iPhone at home and still record. Your watch taps and talks you through the run.</span></p>
+      </div>
+    </div>
+    <div class="strip watches" tabindex="0" aria-label="Apple Watch screenshots">
+      <figure class="shot">
+        <div class="watch"><img data-shot="watch-1" src="assets/screens/ko/watch-1.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">워치에서 바로 시작<small>시작</small></span><span class="en">Start right on your wrist<small>Start</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="watch"><img data-shot="watch-2" src="assets/screens/ko/watch-2.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">시간·거리·페이스·심박<small>달리는 중 · 1km 진행 트랙</small></span><span class="en">Time, distance, pace, heart rate<small>Running · 1 km progress track</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="watch"><img data-shot="watch-3" src="assets/screens/ko/watch-3.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">벗어나면 손목이 톡<small>페이스·심박 범위 알림</small></span><span class="en">A tap when you drift<small>Pace and heart rate alerts</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="watch"><img data-shot="watch-4" src="assets/screens/ko/watch-4.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">Dalli Watch 인증<small>달리기를 마친 뒤</small></span><span class="en">Verified by Dalli Watch<small>After a run</small></span></figcaption>
       </figure>
     </div>
   </section>
