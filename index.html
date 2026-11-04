@@ -81,6 +81,8 @@
   .phone img { width: 100%; height: auto; aspect-ratio: 1320 / 2868; object-fit: cover; border-radius: 12.6% / 5.8%; background: #EEE; }
   .phone.duo { padding: 2.2%; border-radius: 7% / 4.8%; }
   .phone.duo img { aspect-ratio: 1398 / 2034; border-radius: 5% / 3.4%; }
+  .phone.duo.open { padding: 1.2%; border-radius: 3.6% / 5%; }
+  .phone.duo.open img { aspect-ratio: 2853 / 2007; border-radius: 2.6% / 3.6%; }
 
   /* Name */
   .name { padding: 88px 0; border-top: 1px solid var(--line); }
@@ -119,7 +121,9 @@
     scrollbar-width: none;
   }
   .strip::-webkit-scrollbar { display: none; }
-  .strip[data-device="duo"] { grid-auto-columns: 330px; }
+  .strip[data-device="duo"] { grid-auto-columns: auto; }
+  .strip[data-device="duo"] .shot { width: 330px; }
+  .strip[data-device="duo"] .shot.open { width: 667px; }
   .shot { scroll-snap-align: start; margin: 0; }
   .shot[hidden] { display: none; }
   .shot figcaption { margin-top: 18px; font-weight: 700; font-size: 17px; line-height: 1.35; }
@@ -157,7 +161,8 @@
     body { font-size: 16px; }
     .grid { grid-template-columns: 1fr; }
     .strip { grid-auto-columns: 62vw; gap: 18px; }
-    .strip[data-device="duo"] { grid-auto-columns: 78vw; }
+    .strip[data-device="duo"] .shot { width: 78vw; }
+    .strip[data-device="duo"] .shot.open { width: 90vw; }
     .name, .features, .gallery { padding: 64px 0; }
   }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -326,6 +331,10 @@
         <div class="phone"><img data-shot="iphone-3" src="assets/screens/ko/iphone-3.jpg?v=103" loading="lazy" alt=""></div>
         <figcaption><span class="ko">달리는 중엔 잠금 화면에<small>잠금 화면 · 다이내믹 아일랜드</small></span><span class="en">Right on your Lock Screen<small>Lock Screen · Dynamic Island</small></span></figcaption>
       </figure>
+      <figure class="shot open" data-only="duo">
+        <div class="phone duo open"><img data-shot="duo-open-1" src="assets/screens/ko/duo-open-1.jpg?v=103" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">목록과 상세를 나란히<small>펼친 화면 · 모든 기록</small></span><span class="en">List and details, side by side<small>Unfolded · All runs</small></span></figcaption>
+      </figure>
       <figure class="shot">
         <div class="phone"><img data-shot="4" src="assets/screens/ko/iphone-4.jpg?v=103" loading="lazy" alt=""></div>
         <figcaption><span class="ko">골인의 순간<small>달리기를 마친 뒤</small></span><span class="en">Cross the finish line<small>After a run</small></span></figcaption>
@@ -333,6 +342,10 @@
       <figure class="shot" data-only="iphone">
         <div class="phone"><img data-shot="iphone-5" src="assets/screens/ko/iphone-5.jpg?v=103" loading="lazy" alt=""></div>
         <figcaption><span class="ko">한 달, 한 해를 카드로<small>리캡 카드</small></span><span class="en">Your month and year in cards<small>Recap card</small></span></figcaption>
+      </figure>
+      <figure class="shot open" data-only="duo">
+        <div class="phone duo open"><img data-shot="duo-open-2" src="assets/screens/ko/duo-open-2.jpg?v=103" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">펼치면 더 넓게<small>펼친 화면 · 홈</small></span><span class="en">More room when unfolded<small>Unfolded · Home</small></span></figcaption>
       </figure>
       <figure class="shot">
         <div class="phone"><img data-shot="6" src="assets/screens/ko/iphone-6.jpg?v=103" loading="lazy" alt=""></div>
@@ -428,7 +441,7 @@
     });
     document.querySelector(".hero img").alt = heroAlt[lang];
     strip.dataset.device = device;
-    strip.querySelectorAll("[data-only]").forEach(f => { f.hidden = device === "duo"; });
+    strip.querySelectorAll("[data-only]").forEach(f => { f.hidden = f.dataset.only !== device; });
     strip.querySelectorAll(".shot:not([data-only]) .phone").forEach(p => p.classList.toggle("duo", device === "duo"));
     document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
     document.querySelectorAll("[data-device]").forEach(b => { if (b.tagName === "BUTTON") b.setAttribute("aria-pressed", b.dataset.device === device); });
