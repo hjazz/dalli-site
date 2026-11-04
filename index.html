@@ -121,6 +121,7 @@
   .strip::-webkit-scrollbar { display: none; }
   .strip[data-device="duo"] { grid-auto-columns: 330px; }
   .shot { scroll-snap-align: start; margin: 0; }
+  .shot[hidden] { display: none; }
   .shot figcaption { margin-top: 18px; font-weight: 700; font-size: 17px; line-height: 1.35; }
   .shot figcaption small { display: block; color: var(--muted); font-weight: 500; font-size: 14px; margin-top: 2px; }
   .strip-nav { display: flex; gap: 8px; justify-content: flex-end; }
@@ -254,7 +255,7 @@
         <article class="feature">
           <div class="n">02</div>
           <h3><span class="ko">흩어진 기록을 한곳에</span><span class="en">All your runs in one place</span></h3>
-          <p><span class="ko">피트니스 앱과 다른 러닝 앱이 건강 앱에 남긴 달리기를 지도 경로·구간 기록까지 가져와요. 연도별·월별로 모아 볼 수 있어요.</span><span class="en">Runs other apps saved to Health come in with routes and splits. Browse them by year and month.</span></p>
+          <p><span class="ko">피트니스 앱과 다른 러닝 앱이 건강 앱에 남긴 달리기를 지도 경로·구간 기록까지 가져와요. 새 달리기는 앱을 열지 않아도 들어오고, 연도별·월별로 모아 볼 수 있어요.</span><span class="en">Runs other apps saved to Health come in with routes and splits, even when Dalli is closed. Browse them by year and month.</span></p>
         </article>
         <article class="feature">
           <div class="n">03</div>
@@ -264,7 +265,7 @@
         <article class="feature">
           <div class="n">04</div>
           <h3><span class="ko">오늘 할 일로 바꾼 목표</span><span class="en">Goals turned into today</span></h3>
-          <p><span class="ko">주간·월간 거리, 대회 완주, 기록 단축. “하루 1.3km씩 5일이면 골인이에요”처럼 남은 길을 알려줘요.</span><span class="en">Weekly distance, a race, a time to beat — broken down into “1.3 km a day for 5 days gets you there.”</span></p>
+          <p><span class="ko">주간·월간 거리, 대회 완주, 기록 단축. “하루 1.3km씩 5일이면 목표 달성이에요”처럼 남은 길을 알려줘요.</span><span class="en">Weekly distance, a race, a time to beat — broken down into “1.3 km a day for 5 days gets you there.”</span></p>
         </article>
         <article class="feature">
           <div class="n">05</div>
@@ -275,6 +276,21 @@
           <div class="n">06</div>
           <h3><span class="ko">인증샷 카드</span><span class="en">Share cards</span></h3>
           <p><span class="ko">경로·사진·투명 스티커 세 가지 스타일로 꾸며 스토리에 바로 올려요.</span><span class="en">Route, photo or transparent sticker — ready for your stories.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">07</div>
+          <h3><span class="ko">앱을 안 열어도 보이는 목표</span><span class="en">Your goal at a glance</span></h3>
+          <p><span class="ko">홈 화면·잠금 화면 위젯과 Apple Watch 컴플리케이션에 목표 트랙이 떠요. 오늘 몇 km면 되는지 바로 보여요.</span><span class="en">Widgets and Apple Watch complications show your goal track and what today needs, without opening the app.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">08</div>
+          <h3><span class="ko">달리는 중엔 잠금 화면에</span><span class="en">Right on your Lock Screen</span></h3>
+          <p><span class="ko">iPhone으로 달릴 때 시간·거리·페이스가 잠금 화면과 다이내믹 아일랜드에 나와요.</span><span class="en">When you run with iPhone, time, distance and pace stay on the Lock Screen and in the Dynamic Island.</span></p>
+        </article>
+        <article class="feature">
+          <div class="n">09</div>
+          <h3><span class="ko">한 달, 한 해를 카드로</span><span class="en">Your month and year in cards</span></h3>
+          <p><span class="ko">얼마나 달렸는지 리캡 카드로 돌아보고 스토리에 올려요.</span><span class="en">Look back on how far you ran with a recap card, then share it to your Story.</span></p>
         </article>
       </div>
     </div>
@@ -306,24 +322,32 @@
         <div class="phone"><img data-shot="2" src="assets/screens/ko/iphone-2.jpg" loading="lazy" alt=""></div>
         <figcaption><span class="ko">나만의 목표, 한 바퀴씩<small>목표</small></span><span class="en">Your goals, one lap at a time<small>Goals</small></span></figcaption>
       </figure>
-      <figure class="shot">
-        <div class="phone"><img data-shot="3" src="assets/screens/ko/iphone-3.jpg" loading="lazy" alt=""></div>
-        <figcaption><span class="ko">골인의 순간<small>달리기를 마친 뒤</small></span><span class="en">Cross the finish line<small>After a run</small></span></figcaption>
+      <figure class="shot" data-only="iphone">
+        <div class="phone"><img data-shot="iphone-3" src="assets/screens/ko/iphone-3.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">달리는 중엔 잠금 화면에<small>잠금 화면 · 다이내믹 아일랜드</small></span><span class="en">Right on your Lock Screen<small>Lock Screen · Dynamic Island</small></span></figcaption>
       </figure>
       <figure class="shot">
         <div class="phone"><img data-shot="4" src="assets/screens/ko/iphone-4.jpg" loading="lazy" alt=""></div>
-        <figcaption><span class="ko">인증샷으로 자랑하기<small>인증샷 카드</small></span><span class="en">Share your proof<small>Share card</small></span></figcaption>
+        <figcaption><span class="ko">골인의 순간<small>달리기를 마친 뒤</small></span><span class="en">Cross the finish line<small>After a run</small></span></figcaption>
       </figure>
-      <figure class="shot">
-        <div class="phone"><img data-shot="5" src="assets/screens/ko/iphone-5.jpg" loading="lazy" alt=""></div>
-        <figcaption><span class="ko">모든 달리기를 한곳에<small>기록 상세</small></span><span class="en">Every run, in one place<small>Run detail</small></span></figcaption>
+      <figure class="shot" data-only="iphone">
+        <div class="phone"><img data-shot="iphone-5" src="assets/screens/ko/iphone-5.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">한 달, 한 해를 카드로<small>리캡 카드</small></span><span class="en">Your month and year in cards<small>Recap card</small></span></figcaption>
       </figure>
       <figure class="shot">
         <div class="phone"><img data-shot="6" src="assets/screens/ko/iphone-6.jpg" loading="lazy" alt=""></div>
-        <figcaption><span class="ko">몇 년 치 달리기도 한눈에<small>모든 기록 · 연도별·월별 통계</small></span><span class="en">Years of runs, at a glance<small>All runs · yearly and monthly stats</small></span></figcaption>
+        <figcaption><span class="ko">인증샷으로 자랑하기<small>인증샷 카드</small></span><span class="en">Share your proof<small>Share card</small></span></figcaption>
       </figure>
       <figure class="shot">
         <div class="phone"><img data-shot="7" src="assets/screens/ko/iphone-7.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">모든 달리기를 한곳에<small>기록 상세</small></span><span class="en">Every run, in one place<small>Run detail</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="8" src="assets/screens/ko/iphone-8.jpg" loading="lazy" alt=""></div>
+        <figcaption><span class="ko">몇 년 치 달리기도 한눈에<small>모든 기록 · 연도별·월별 통계</small></span><span class="en">Years of runs, at a glance<small>All runs · yearly and monthly stats</small></span></figcaption>
+      </figure>
+      <figure class="shot">
+        <div class="phone"><img data-shot="9" src="assets/screens/ko/iphone-9.jpg" loading="lazy" alt=""></div>
         <figcaption><span class="ko">시작 버튼 하나로<small>기록</small></span><span class="en">Start with one tap<small>Record</small></span></figcaption>
       </figure>
     </div>
@@ -334,7 +358,7 @@
       <div>
         <p class="eyebrow"><span class="ko">Apple Watch</span><span class="en">Apple Watch</span></p>
         <h2><span class="ko">손목에서도 Dalli</span><span class="en">Dalli on your wrist</span></h2>
-        <p class="lede" style="margin-top:12px"><span class="ko">iPhone 없이 워치만 차고 나가도 기록되고, 달리는 중에 진동과 음성으로 알려줘요.</span><span class="en">Leave your iPhone at home and still record. Your watch taps and talks you through the run.</span></p>
+        <p class="lede" style="margin-top:12px"><span class="ko">iPhone 없이 워치만 차고 나가도 기록되고, 달리는 중에 진동과 음성으로 알려줘요. 시계 화면 컴플리케이션에서 목표 트랙도 바로 봐요.</span><span class="en">Leave your iPhone at home and still record. Your watch taps and talks you through the run, and a complication keeps your goal track on the watch face.</span></p>
       </div>
     </div>
     <div class="strip watches" tabindex="0" aria-label="Apple Watch screenshots">
@@ -363,7 +387,7 @@
         <div>
           <p class="eyebrow"><span class="ko">개인정보</span><span class="en">Privacy</span></p>
           <h2><span class="ko">기록은 내 기기에만</span><span class="en">Your runs stay on your device</span></h2>
-          <p><span class="ko">Dalli에는 서버가 없어요. 달리기·위치·건강 데이터는 iPhone과 Apple 건강 앱 밖으로 나가지 않아요.</span><span class="en">Dalli has no server. Your runs, location and health data never leave your iPhone and Apple Health.</span></p>
+          <p><span class="ko">Dalli에는 서버가 없어요. 달리기·위치·건강 데이터는 내 iPhone·Apple Watch와 Apple 건강 앱 밖으로 나가지 않아요.</span><span class="en">Dalli has no server. Your runs, location and health data never leave your iPhone, Apple Watch and Apple Health.</span></p>
         </div>
         <ul>
           <li><span class="ko">계정 없이 바로 시작</span><span class="en">No account to create</span></li>
@@ -404,7 +428,8 @@
     });
     document.querySelector(".hero img").alt = heroAlt[lang];
     strip.dataset.device = device;
-    strip.querySelectorAll(".phone").forEach(p => p.classList.toggle("duo", device === "duo"));
+    strip.querySelectorAll("[data-only]").forEach(f => { f.hidden = device === "duo"; });
+    strip.querySelectorAll(".shot:not([data-only]) .phone").forEach(p => p.classList.toggle("duo", device === "duo"));
     document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
     document.querySelectorAll("[data-device]").forEach(b => { if (b.tagName === "BUTTON") b.setAttribute("aria-pressed", b.dataset.device === device); });
   }
