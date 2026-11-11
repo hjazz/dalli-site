@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dalli 업데이트 소식</title>
+<meta name="description" content="Dalli 버전별 새 기능. What's new in each version of Dalli.">
+<meta property="og:title" content="Dalli 업데이트 소식">
+<meta property="og:description" content="버전마다 새로 생긴 기능을 모았어요.">
+<meta property="og:image" content="https://hjazz.github.io/dalli-site/assets/icon.png">
+<meta name="theme-color" content="#F5F3F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161F" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/icon.png">
+<link rel="apple-touch-icon" href="../assets/icon.png">
+<style>
+  :root {
+    --ink: #14161F; --muted: #6B6E78; --accent: #FF5C1A; --accent-soft: #FFE7DC;
+    --paper: #F5F3F0; --card: #FFFFFF; --line: #E2DFDA;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #F5F3F0; --muted: #9C9EA6; --accent-soft: #3A2116; --paper: #0E0F15; --card: #1B1D27; --line: #2A2C37; }
+  }
+  :root[lang="ko"] .en, :root[lang="en"] .ko { display: none !important; }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    -webkit-font-smoothing: antialiased; word-break: keep-all; overflow-wrap: break-word;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+  .eyebrow { color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 12px; }
+  h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; margin: 0; }
+
+  header { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 86%, transparent); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px); }
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 60px; max-width: 1120px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand svg { width: 30px; height: 30px; border-radius: 8px; }
+  .brand b { color: var(--accent); font-weight: 900; letter-spacing: .22em; font-size: 15px; }
+  .lang { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button { font: inherit; font-size: 14px; font-weight: 700; border: 0; background: none; color: var(--muted); padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+  .intro { padding: 40px 0 28px; }
+  .intro h1 { font-size: clamp(34px, 6vw, 52px); font-weight: 850; letter-spacing: -0.035em; }
+  .intro h1 em { font-style: normal; color: var(--accent); }
+  .intro p { color: var(--muted); font-size: 18px; margin: 14px 0 0; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 0; list-style: none; }
+  .jump a { display: inline-block; text-decoration: none; font-weight: 700; font-size: 14px; padding: 6px 14px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .jump a:hover { color: var(--accent); }
+
+  .release { position: relative; background: var(--card); border-radius: 24px; padding: 28px 26px 30px; margin-bottom: 18px; scroll-margin-top: 76px; }
+  .release-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .release h2 { font-size: 30px; font-weight: 850; font-variant-numeric: tabular-nums; }
+  .badge { background: var(--accent); color: #fff; font-size: 13px; font-weight: 800; border-radius: 999px; padding: 3px 11px; letter-spacing: .02em; }
+  .release-head small { color: var(--muted); font-size: 15px; }
+  .release > p { color: var(--muted); margin: 8px 0 0; }
+  .items { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 16px; }
+  .items li { display: grid; grid-template-columns: 10px 1fr; gap: 14px; }
+  .items li::before { content: ""; width: 10px; height: 10px; margin-top: 9px; border-radius: 50%; background: var(--accent); }
+  .items b { display: block; font-size: 18px; }
+  .items span { color: var(--muted); font-size: 16px; }
+  .release.small .items li::before { background: var(--line); }
+
+  .cta { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 34px 0 0; padding: 26px; border-radius: 24px; background: var(--accent-soft); }
+  .cta p { margin: 0; font-weight: 700; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 16px; padding: 12px 20px; border-radius: 14px; background: var(--ink); color: var(--paper); }
+
+  footer { border-top: 1px solid var(--line); margin-top: 56px; padding: 32px 0 48px; color: var(--muted); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; max-width: 1120px; }
+  footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .release { padding: 24px 20px 26px; border-radius: 20px; }
+    .release h2 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#FF5C1A"/>
+    <g transform="translate(50 50) scale(0.88) translate(-51.5 -50)">
+      <path d="M42 25 H50 A25 25 0 0 1 50 75 H42 Q28 75 28 61 V39 Q28 25 42 25 Z" fill="none" stroke="#FFF" stroke-width="19" stroke-linejoin="round"/>
+      <path d="M42 25 H50 A25 25 0 0 1 50 75 H42 Q28 75 28 61 V39 Q28 25 42 25 Z" fill="none" stroke="#FF5C1A" stroke-width="1.6"/>
+      <line x1="19.5" y1="50" x2="36.5" y2="50" stroke="#14161F" stroke-width="3"/>
+      <circle cx="67.7" cy="32.3" r="6.5" fill="#14161F"/>
+    </g>
+  </symbol>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="../" aria-label="Dalli"><svg><use href="#logo"/></svg><b>DALLI</b></a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ko" aria-pressed="true">한국어</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <p class="eyebrow"><span class="ko">업데이트 소식</span><span class="en">What's new</span></p>
+    <h1><span class="ko">버전마다 <em>새로 생긴</em> 것들</span><span class="en">What's <em>new</em> in each version</span></h1>
+    <p><span class="ko">App Store에서 업데이트하면 바로 써 볼 수 있어요.</span><span class="en">Update from the App Store to try them.</span></p>
+    <ul class="jump" aria-label="Versions">
+      <li><a href="#v1.0.4">1.0.4</a></li>
+      <li><a href="#v1.0.3">1.0.3</a></li>
+      <li><a href="#v1.0.2">1.0.2</a></li>
+      <li><a href="#v1.0.1">1.0.1</a></li>
+      <li><a href="#v1.0">1.0</a></li>
+    </ul>
+  </section>
+
+  <article class="release" id="v1.0.4">
+    <div class="release-head"><h2>1.0.4</h2><span class="badge"><span class="ko">최신</span><span class="en">Latest</span></span></div>
+    <ul class="items">
+      <li><div><b><span class="ko">같은 코스, 지난번과 비교</span><span class="en">Compare runs on the same course</span></b>
+        <span class="ko">자주 뛰는 길을 다시 달리면 같은 코스로 알아봐요. 지난번보다 km당 페이스가 얼마나 달라졌는지, 이 코스 최고 기록은 언제였는지 기록 상세에서 보여줘요. 반대 방향으로 달려도 같은 코스로 봐요.</span>
+        <span class="en">Run a familiar route again and Dalli recognizes it. Run details show how your pace per km changed since last time and when you set your best on that course. Running it in reverse counts too.</span></div></li>
+      <li><div><b><span class="ko">심박 존으로 고르는 알림</span><span class="en">Heart rate alerts by zone</span></b>
+        <span class="ko">달리기 중 심박 알림 범위를 존 1~5 중에서 골라요. 범위는 최대 심박수로 계산하고, 프로필에서 최대 심박수를 바꾸면 워치 알림도 따라 바뀌어요.</span>
+        <span class="en">Pick a zone from 1 to 5 for heart rate alerts. The range comes from your max heart rate, and your watch alerts follow when you change it in Profile.</span></div></li>
+      <li><div><b><span class="ko">더 크게 보이는 경로</span><span class="en">A bigger route</span></b>
+        <span class="ko">기록 상세의 지도에서 경로가 더 크게 보이고, 기록이 한눈에 더 많이 들어와요.</span>
+        <span class="en">The route is larger on the run details map, and more of your stats fit on screen.</span></div></li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.0.3">
+    <div class="release-head"><h2>1.0.3</h2></div>
+    <ul class="items">
+      <li><div><b><span class="ko">위젯과 컴플리케이션</span><span class="en">Widgets and complications</span></b>
+        <span class="ko">홈 화면·잠금 화면 위젯과 Apple Watch 컴플리케이션에 목표 트랙이 떠요. 오늘 몇 km면 되는지 앱을 안 열어도 보여요.</span>
+        <span class="en">Your goal track appears in Home Screen and Lock Screen widgets and Apple Watch complications, so you see today's distance without opening the app.</span></div></li>
+      <li><div><b><span class="ko">달리는 중엔 잠금 화면에</span><span class="en">Right on your Lock Screen</span></b>
+        <span class="ko">iPhone으로 달릴 때 시간·거리·페이스가 잠금 화면과 다이내믹 아일랜드에 나와요.</span>
+        <span class="en">Time, distance and pace show on the Lock Screen and in the Dynamic Island while you run with iPhone.</span></div></li>
+      <li><div><b><span class="ko">리캡 카드</span><span class="en">Recap cards</span></b>
+        <span class="ko">지난달과 올해를 카드로 돌아보고 스토리에 올려요. 모든 기록에서 열 수 있어요.</span>
+        <span class="en">Look back on last month and this year with cards you can share to your Story. Open them from All Runs.</span></div></li>
+      <li><div><b><span class="ko">알아서 들어오는 기록</span><span class="en">Runs come in on their own</span></b>
+        <span class="ko">새 달리기가 건강 앱에 들어오면 앱을 열지 않아도 기록을 가져와요.</span>
+        <span class="en">New runs in the Health app come in without opening Dalli.</span></div></li>
+    </ul>
+  </article>
+
+  <article class="release" id="v1.0.2">
+    <div class="release-head"><h2>1.0.2</h2></div>
+    <ul class="items">
+      <li><div><b><span class="ko">워치 출발 카운트다운</span><span class="en">Countdown on Apple Watch</span></b>
+        <span class="ko">Apple Watch에서 달리기를 시작하면 5초 카운트다운이 소리·진동과 함께 흘러요. 탭하면 바로 출발해요.</span>
+        <span class="en">A 5-second countdown with sound and taps when you start a run on Apple Watch. Tap to start right away.</span></div></li>
+      <li><div><b><span class="ko">운동 앱과 같은 심박수 존</span><span class="en">Heart rate zones like the Workout app</span></b>
+        <span class="ko">심박수 존을 최대 심박수와 안정 시 심박수로 나누고, 존 1부터 차례로 보여줘요.</span>
+        <span class="en">Zones now use your max and resting heart rate, and are listed from zone 1.</span></div></li>
+      <li><div><b><span class="ko">넓은 화면에서 나란히</span><span class="en">Side by side on wide screens</span></b>
+        <span class="ko">펼친 화면처럼 넓은 화면에서 모든 기록 목록과 상세를 나란히 봐요.</span>
+        <span class="en">On wide screens such as an unfolded display, see All Runs and a run's details side by side.</span></div></li>
+    </ul>
+    <p><span class="ko">사진 인증샷 카드의 경로 색, 기록 제목·메모 입력, 삭제 확인 창 위치도 다듬었어요.</span><span class="en">Also: routes on photo share cards stay orange, smoother title and note typing, and the delete confirmation appears by the delete button.</span></p>
+  </article>
+
+  <article class="release" id="v1.0.1">
+    <div class="release-head"><h2>1.0.1</h2></div>
+    <ul class="items">
+      <li><div><b><span class="ko">수준별 추천 루틴</span><span class="en">Recommended routines</span></b>
+        <span class="ko">30분 달리기(입문), 하프 완주(중급), 풀코스 대회 준비(상급). 주차마다 할 달리기를 알려주고, 달리면 체크돼요.</span>
+        <span class="en">Run 30 Minutes, Finish a Half and Marathon Prep. Each week shows the runs to do and checks them off as you go.</span></div></li>
+      <li><div><b><span class="ko">달리는 중 워치 알림</span><span class="en">Apple Watch alerts while you run</span></b>
+        <span class="ko">페이스·심박 범위, 1km 구간, 페이스메이커, 목표 달성, 자동 일시정지를 진동과 음성으로 알려줘요.</span>
+        <span class="en">Pace and heart rate ranges, kilometer splits, pacemaker, goals reached and auto-pause, with taps and voice.</span></div></li>
+      <li><div><b><span class="ko">더 깊은 기록 상세</span><span class="en">Deeper run details</span></b>
+        <span class="ko">구간별 평균 심박, 심박수 존, 케이던스·러닝 파워, 운동 강도를 봐요.</span>
+        <span class="en">Average heart rate per split, heart rate zones, cadence, running power and workout effort.</span></div></li>
+      <li><div><b><span class="ko">거리별로 걸러 보기와 배지</span><span class="en">Distance filters and badges</span></b>
+        <span class="ko">모든 기록을 5K·10K·하프·풀코스·100K로 걸러 보고, 단계형 배지와 5K·10K 횟수 배지를 모아요.</span>
+        <span class="en">Filter all runs by 5K, 10K, half, full and 100K, and collect tiered badges and 5K/10K count badges.</span></div></li>
+    </ul>
+  </article>
+
+  <article class="release small" id="v1.0">
+    <div class="release-head"><h2>1.0</h2><small><span class="ko">2026년 11월 2일 첫 출시</span><span class="en">First released November 2, 2026</span></small></div>
+    <ul class="items">
+      <li><div><b><span class="ko">iPhone과 Apple Watch로 기록</span><span class="en">Record on iPhone and Apple Watch</span></b>
+        <span class="ko">경로·거리·페이스·심박수를 기록하고, 피트니스 앱에 쌓인 기록도 가져와요.</span>
+        <span class="en">Record route, distance, pace and heart rate, and bring in the runs already in your Fitness app.</span></div></li>
+      <li><div><b><span class="ko">오늘 할 일로 바꾼 목표</span><span class="en">Goals turned into today</span></b>
+        <span class="ko">주간·월간 거리, 대회 완주, 기록 단축 목표까지 남은 길을 알려줘요.</span>
+        <span class="en">Weekly and monthly distance, a race or a time to beat, broken down into what today needs.</span></div></li>
+      <li><div><b><span class="ko">인증 기록과 인증샷 카드</span><span class="en">Verified runs and share cards</span></b>
+        <span class="ko">센서로 잰 기록에는 인증 배지가 붙고, 경로·사진·스티커 카드로 스토리에 올려요.</span>
+        <span class="en">Sensor-measured runs get a verified badge, and route, photo or sticker cards are ready for your Story.</span></div></li>
+    </ul>
+  </article>
+
+  <div class="cta">
+    <p><span class="ko">Dalli는 무료예요. 계정 없이 바로 시작해요.</span><span class="en">Dalli is free, with no account needed.</span></p>
+    <a class="btn" href="https://apps.apple.com/app/id6827914282"><span class="ko">App Store에서 받기</span><span class="en">Download on the App Store</span></a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Dalli</span>
+    <nav>
+      <a href="../"><span class="ko">소개</span><span class="en">Home</span></a>
+      <a href="../support/"><span class="ko">지원</span><span class="en">Support</span></a>
+      <a href="../privacy/"><span class="ko">개인정보처리방침</span><span class="en">Privacy Policy</span></a>
+      <a href="https://www.instagram.com/dalli.app/">Instagram @dalli.app</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const titles = { ko: "Dalli 업데이트 소식", en: "Dalli · What's New" };
+  let lang = "ko";
+
+  function render() {
+    root.lang = lang;
+    document.title = titles[lang];
+    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  }
+
+  // 소개 페이지와 같은 순서로 고른다: 주소의 ?lang=en, 지난번 선택, 브라우저 언어.
+  const query = new URLSearchParams(location.search).get("lang");
+  let saved = null;
+  try { saved = localStorage.getItem("dalli.lang"); } catch {}
+  lang = query || saved || (navigator.language.startsWith("ko") ? "ko" : "en");
+  if (!titles[lang]) lang = "ko";
+  render();
+
+  document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => {
+    lang = b.dataset.lang;
+    try { localStorage.setItem("dalli.lang", lang); } catch {}
+    render();
+  }));
+</script>
+</body>
+</html>
